@@ -75,11 +75,11 @@
 
 2. Run SQL queries on Iceberg tables:
    ```sql
-   SELECT * FROM iceberg_table_name LIMIT 10;
+SHOW DATABASES;
    ```
 
 3. Visualize and analyze results directly within DBeaver.
-
+(https://github.com/kristianaryanto/SimplyBigData-IcebergMinIO-SparkLake/blob/main/dbeaver_spk.png)
 ### Explore Data with Jupyter Notebook
 
 - Launch Jupyter Notebook and write Spark jobs in Python or Scala to explore your datasets interactively.
