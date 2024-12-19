@@ -1,0 +1,98 @@
+version: "3"
+
+services:
+  spark-iceberg:
+    image: tabulario/spark-iceberg:3.3.0_1.0.0
+    container_name: spark-iceberg
+    build: spark/
+    networks:
+      iceberg_net:
+    depends_on:
+      - rest
+      - minio
+    volumes:
+      - ./warehouse:/home/iceberg/warehouse
+      - ./notebooks:/home/iceberg/notebooks/notebooks
+      # - ./entrypoint.sh:/entrypoint.sh  # Mount the entrypoint script
+    environment:
+      - AWS_ACCESS_KEY_ID=admin
+      - AWS_SECRET_ACCESS_KEY=password
+      - AWS_REGION=us-east-1
+      - SPARK_MODE=master
+      - SPARK_MASTER_PORT=7077
+      - SPARK_MASTER_WEBUI_PORT=8080
+      - ENABLE_HIVE_SUPPORT=true 
+      - ENABLE_SPARK_THRIFT_SERVER=true
+    ports:
+      - 8888:8888
+      - 8080:8080
+      - 7077:7077
+      - 10000:10000
+      - 10001:10001
+
+  spark-worker-2:
+    image: bde2020/spark-worker:3.3.0-hadoop3.3
+    container_name: spark-worker-2
+    networks:
+      iceberg_net:
+    depends_on:
+      - spark-iceberg
+    ports:
+      - "8082:8082"  # Worker 2 UI
+    environment:
+      - SPARK_MASTER=spark://spark-iceberg:7077
+      - SPARK_WORKER_MEMORY=3g
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_PORT=8082
+    volumes:
+      - ./data:/opt/spark/data  # Mount the data folder
+  rest:
+    image: tabulario/iceberg-rest:1.6.0
+    container_name: iceberg-rest
+    networks:
+      iceberg_net:
+    ports:
+      - 8181:8181
+    environment:
+      - AWS_ACCESS_KEY_ID=admin
+      - AWS_SECRET_ACCESS_KEY=password
+      - AWS_REGION=us-east-1
+      - CATALOG_WAREHOUSE=s3://warehouse/
+      - CATALOG_IO__IMPL=org.apache.iceberg.aws.s3.S3FileIO
+      - CATALOG_S3_ENDPOINT=http://minio:9000
+  minio:
+    image: minio/minio:RELEASE.2024-12-13T22-19-12Z
+    container_name: minio
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=password
+      - MINIO_DOMAIN=minio
+    networks:
+      iceberg_net:
+        aliases:
+          - warehouse.minio
+    ports:
+      - 9001:9001
+      - 9000:9000
+    command: ["server", "/data", "--console-address", ":9001"]
+  mc:
+    depends_on:
+      - minio
+    image: minio/mc:RELEASE.2024-11-21T17-21-54Z
+    container_name: mc
+    networks:
+      iceberg_net:
+    environment:
+      - AWS_ACCESS_KEY_ID=admin
+      - AWS_SECRET_ACCESS_KEY=password
+      - AWS_REGION=us-east-1
+    entrypoint: >
+      /bin/sh -c "
+      until (/usr/bin/mc config host add minio http://minio:9000 admin password) do echo '...waiting...' && sleep 1; done;
+      /usr/bin/mc rm -r --force minio/warehouse;
+      /usr/bin/mc mb minio/warehouse;
+      /usr/bin/mc policy set public minio/warehouse;
+      tail -f /dev/null
+      "
+networks:
+  iceberg_net:
