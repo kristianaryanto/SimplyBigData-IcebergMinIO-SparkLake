@@ -75,8 +75,7 @@
 
 2. Run SQL queries on Iceberg tables:
    ```sql
-SHOW DATABASES;
-   ```
+SHOW DATABASES;```
 
 3. Visualize and analyze results directly within DBeaver.
 (https://github.com/kristianaryanto/SimplyBigData-IcebergMinIO-SparkLake/blob/main/dbeaver_spk.png)
