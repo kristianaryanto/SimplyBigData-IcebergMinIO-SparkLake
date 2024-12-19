@@ -1,4 +1,4 @@
-![Simply Big Data]([moderen_stack.jpeg](https://blog.min.io/content/images/2023/08/A-Developers-Introduction-to-Apache-Iceberg-using-PyIceberg--PySpark-and-MinIO.jpg))
+![Simply Big Data]([A-Developers-Introduction-to-Apache-Iceberg-using-PyIceberg--PySpark-and-MinIO.jpg])
 
 # 🗂️ Simply Big Data: Build a Scalable Data Lake with Iceberg and MinIO 🚀
 
