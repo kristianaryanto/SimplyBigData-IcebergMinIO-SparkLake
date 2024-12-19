@@ -1,3 +1,5 @@
+![Simply Big Data]([moderen_stack.jpeg](https://blog.min.io/content/images/2023/08/A-Developers-Introduction-to-Apache-Iceberg-using-PyIceberg--PySpark-and-MinIO.jpg))
+
 # 🗂️ Simply Big Data: Build a Scalable Data Lake with Iceberg and MinIO 🚀
 
 > **Simplify Big Data Management**: Easily set up a robust data lake leveraging **Apache Iceberg**, **MinIO**, and **Spark**. This setup is perfect for running SQL queries on massive datasets, scaling data processing, and enabling fast and interactive analytics.
