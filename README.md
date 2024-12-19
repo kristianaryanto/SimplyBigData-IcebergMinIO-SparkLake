@@ -74,11 +74,10 @@
    - Port: `10000`
 
 2. Run SQL queries on Iceberg tables:
-   ```sql
-SHOW DATABASES;```
+   ```SHOW DATABASES;```
 
 3. Visualize and analyze results directly within DBeaver.
-(https://github.com/kristianaryanto/SimplyBigData-IcebergMinIO-SparkLake/blob/main/dbeaver_spk.png)
+![dbeaver_example](https://github.com/kristianaryanto/SimplyBigData-IcebergMinIO-SparkLake/blob/main/dbeaver_spk.png)
 ### Explore Data with Jupyter Notebook
 
 - Launch Jupyter Notebook and write Spark jobs in Python or Scala to explore your datasets interactively.
